@@ -50,8 +50,6 @@ ALL_DEFAULT_INSTALLED_MODULES += $(SYMLINKS)
 ALL_MODULES.$(LOCAL_MODULE).INSTALLED := \
     $(ALL_MODULES.$(LOCAL_MODULE).INSTALLED) $(SYMLINKS)
 
-ifdef SUPERUSER_EMBEDDED
-
 # make sure init.superuser.rc is imported from
 # init.rc or similar
 
@@ -59,13 +57,16 @@ SUPERUSER_RC := $(TARGET_ROOT_OUT)/init.superuser.rc
 $(SUPERUSER_RC): $(LOCAL_PATH)/init.superuser.rc | $(ACP)
 	$(copy-file-to-new-target)
 
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(SUPERUSER_RC)
+
+ifdef SUPERUSER_EMBEDDED
+
 SUPERUSER_MARKER := $(TARGET_OUT_ETC)/.has_su_daemon
 $(SUPERUSER_MARKER): $(LOCAL_INSTALLED_MODULE)
 	@mkdir -p $(dir $@)
 	@rm -rf $@
 	$(hide) touch $@
 
-ALL_MODULES.$(LOCAL_MODULE).INSTALLED := \
-    $(ALL_MODULES.$(LOCAL_MODULE).INSTALLED) $(SUPERUSER_RC) $(SUPERUSER_MARKER)
+ALL_MODULES.$(LOCAL_MODULE).INSTALLED += $(SUPERUSER_MARKER)
 
 endif
