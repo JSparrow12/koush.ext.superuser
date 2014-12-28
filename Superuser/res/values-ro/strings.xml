@@ -17,6 +17,9 @@
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="superuser">Superuser</string>
+  <string name="su_allow">Permite</string>
+  <string name="su_allow_countdown">Permite (%1$s)</string>
+  <string name="su_deny">Refuză</string>
   <string name="status_incoming">Cerere superuser de intrare\u2026</string>
   <string name="unknown_uid">UID necunoscut: %s</string>
   <string name="application_request">%s cere acces Superuser.</string>
@@ -39,12 +42,14 @@
   <string name="logging_summary">Activați înscrierea în jurnal a tuturor cererilor Superuser</string>
   <string name="pin_protection">Protecție cu PIN</string>
   <string name="pin_protection_summary">Necesită introducerea unui PIN pentru aprobarea cererilor Superuser</string>
-  <string name="request_timeout">Expirare Cerere</string>
+  <string name="request_timeout">Expirare cerere</string>
   <string name="request_timeout_summary">Cererile Superuser vor expira și vor fi refuzate după %s secunde</string>
   <string name="notifications">Notificări</string>
   <string name="none">Nimic</string>
   <string name="toast">Alertă</string>
   <string name="notification">Notificare</string>
+  <string name="toast_summary">notificare</string>
+  <string name="notification_summary">notificare</string>
   <string name="notifications_summary">O %s se va afișa când unei aplicații i se acordă sau i se refuză permisiuni de Superuser</string>
   <string name="no_notification">Nici o notificare nu va fi afișată</string>
   <string name="enter_pin">Introduceți PIN</string>
@@ -97,7 +102,7 @@
   <string name="whats_new">Ce este nou</string>
   <string name="rate">Evaluare</string>
   <string name="theme">Temă</string>
-  <string name="light">Luminos</string>
+  <string name="light">Luminoasă</string>
   <string name="dark">Întunecat</string>
   <string name="pin_disabled">Protecție PIN pentru Superuser dezactivată</string>
   <string name="revoke_permission">Revocă permisiune Superuser</string>
