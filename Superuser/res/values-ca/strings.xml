@@ -26,7 +26,7 @@
   <string name="info">Alerta: Si no entens això, hauries de denegar la petició.</string>
   <string name="request">Petició de superusuari</string>
   <string name="package_header">Paquet:</string>
-  <string name="app_header">App:</string>
+  <string name="app_header">Aplicació:</string>
   <string name="uid_header">UID demanada:</string>
   <string name="command_header">Ordre:</string>
   <string name="this_time_only">Només aquesta vegada</string>
@@ -37,7 +37,7 @@
   <string name="settings">Configuració</string>
   <string name="delete">Esborra</string>
   <string name="no_logs">Sense Registres</string>
-  <string name="no_apps">Actualment no hi ha polítiques d\'app de Superusuari.</string>
+  <string name="no_apps">Actualment no hi ha polítiques d\'aplicació de Superusuari.</string>
   <string name="logging">Registre</string>
   <string name="logging_summary">Activa o desactiva el registre de totes les peticions de Superusuari</string>
   <string name="pin_protection">Protecció amb PIN</string>
@@ -65,7 +65,7 @@
   <string name="superuser_description">permisos totals a totes les característiques i emmagatzematge del dispositiu</string>
   <string name="superuser_description_more">Superusuari otorga accés total a totes les característiques del dispositiu i emmagatzematge, incloent els elements segurs i sensibles del maquinari del teu dispositiu. Aquest permís és potencialment perillós.</string>
   <string name="declared_permission">Permís Declarat</string>
-  <string name="declared_permission_summary">Permet només les peticions d\'apps que declarin android.permission.ACCESS_SUPERUSER</string>
+  <string name="declared_permission_summary">Permet només les peticions d\'aplicacions que declarin android.permission.ACCESS_SUPERUSER</string>
   <string name="automatic_response">Resposta Automàtica</string>
   <string name="prompt">Pregunta</string>
   <string name="automatic_response_allow_summary">Permet automaticament totes les noves peticions</string>
@@ -83,7 +83,7 @@
   <string name="owner_login_info">Si us plau canvia al compte del propietari per aprovar o denegar aquesta petició.</string>
   <string name="all_commands">Totes les ordres</string>
   <string name="about">Quant a</string>
-  <string name="apps">Apps</string>
+  <string name="apps">Aplicacions</string>
   <string name="installing">Instal·lant</string>
   <string name="installing_superuser">Instal·lant Superuari\u2026</string>
   <string name="install_superuser">Instal·la Superusuari</string>
@@ -96,9 +96,9 @@
   <string name="su_binary_outdated">El binari su està obsolet.</string>
   <string name="superuser_access">Accés al Superusuari</string>
   <string name="access_disabled">Desactivat</string>
-  <string name="apps_only">Només Apps</string>
+  <string name="apps_only">Només aplicacions</string>
   <string name="adb_only">Només ADB</string>
-  <string name="apps_and_adb">Apps i ADB</string>
+  <string name="apps_and_adb">Aplicacions i ADB</string>
   <string name="whats_new">Que hi ha de nou</string>
   <string name="rate">Valora</string>
   <string name="theme">Tema</string>
