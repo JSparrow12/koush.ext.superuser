@@ -17,7 +17,7 @@
 package com.koushikdutta.superuser;
 
 
-import android.support.v4.app.Fragment;
+import androidx.fragment.app.Fragment;
 
 import com.koushikdutta.widgets.SupportFragment;
 
@@ -35,8 +35,6 @@ public class LogFragment extends SupportFragment<LogFragmentInternal> {
     }
 
     void onDelete(int id) {
-//        getFragmentManager().beginTransaction().remove(this).commit();
-//        getFragmentManager().popBackStack("content", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment f = getFragmentManager().findFragmentById(id);
         if (f != null && f instanceof PolicyFragment) {
             PolicyFragment p = (PolicyFragment)f;

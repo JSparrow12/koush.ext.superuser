@@ -17,13 +17,13 @@
 package com.koushikdutta.superuser;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
 
 import com.koushikdutta.widgets.NativeFragment;
 
@@ -59,8 +59,6 @@ public class LogNativeFragment extends NativeFragment<LogFragmentInternal> {
     }
 
     void onDelete(int id) {
-//        getFragmentManager().beginTransaction().remove(this).commit();
-//        getFragmentManager().popBackStack("content", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment f = getFragmentManager().findFragmentById(id);
         if (f != null && f instanceof PolicyNativeFragment) {
             PolicyNativeFragment p = (PolicyNativeFragment)f;
