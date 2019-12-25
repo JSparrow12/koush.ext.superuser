@@ -12,4 +12,9 @@
     <style name="RobotoButtonStyle" parent="android:Widget.Holo.Button">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>
+
+    <style name="PinBottomButton" parent="BottomButton">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 </resources>
