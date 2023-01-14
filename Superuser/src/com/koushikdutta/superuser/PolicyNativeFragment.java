@@ -34,7 +34,7 @@ public class PolicyNativeFragment extends NativeFragment<PolicyFragmentInternal>
     public Context getContext() {
         if (mWrapper != null)
             return mWrapper;
-        mWrapper = new ContextThemeWrapper(super.getContext(), R.style.SuperuserDark_LargeIcon);
+        mWrapper = new ContextThemeWrapper(super.getContext(), R.style.Superuser_LargeIcon);
         return mWrapper;
     }
 
@@ -47,31 +47,31 @@ public class PolicyNativeFragment extends NativeFragment<PolicyFragmentInternal>
         public Context getContext() {
             return PolicyNativeFragment.this.getContext();
         }
-        
+
         @Override
         protected int getListFragmentResource() {
             return R.layout.policy_list_content;
         }
-        
+
         @Override
         protected LogNativeFragment createLogNativeFragment() {
             // factory hook.
             return super.createLogNativeFragment();
         }
-        
+
         @Override
         protected SettingsNativeFragment createSettingsNativeFragment() {
             // factory hook.
             return super.createSettingsNativeFragment();
         }
     };
-    
+
     @Override
     public PolicyFragmentInternal createFragmentInterface() {
         // factory hook.
         return new FragmentInternal(this);
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView((LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE), container, savedInstanceState);

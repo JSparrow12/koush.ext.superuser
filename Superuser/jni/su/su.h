@@ -61,7 +61,7 @@
 #endif
 #define REQUESTOR_DATA_PATH "/data/data/"
 #define REQUESTOR_FILES_PATH REQUESTOR_DATA_PATH REQUESTOR "/files"
-#define REQUESTOR_USER_PATH "/data/user/"
+#define REQUESTOR_USER_PATH "/data/user_de"
 #define REQUESTOR_CACHE_PATH "/dev/" REQUESTOR
 #define REQUESTOR_DAEMON_PATH REQUESTOR_CACHE_PATH ".daemon"
 
@@ -77,7 +77,7 @@
 #define str(a) #a
 
 #ifndef VERSION_CODE
-#define VERSION_CODE 14
+#define VERSION_CODE 16
 #endif
 #define VERSION xstr(VERSION_CODE) " " REQUESTOR
 
@@ -173,7 +173,7 @@ void exec_logw(const char* fmt, ...);
 void exec_logd(const char* fmt, ...);
 
 int run_daemon();
-int connect_daemon(int argc, char *argv[]);
+int connect_daemon(int argc, char *argv[], int ppid);
 int su_main(int argc, char *argv[], int need_client);
 // for when you give zero fucks about the state of the child process.
 // this version of fork understands you don't care about the child.

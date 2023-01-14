@@ -17,13 +17,13 @@
 package com.koushikdutta.superuser;
 
 import android.annotation.SuppressLint;
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import androidx.fragment.app.Fragment;
 
 import com.koushikdutta.widgets.NativeFragment;
 
@@ -33,7 +33,7 @@ public class LogNativeFragment extends NativeFragment<LogFragmentInternal> {
     public Context getContext() {
         if (mWrapper != null)
             return mWrapper;
-        mWrapper = new ContextThemeWrapper(super.getContext(), R.style.SuperuserDark);
+        mWrapper = new ContextThemeWrapper(super.getContext(), R.style.SuperuserLight);
         return mWrapper;
     }
 
@@ -44,7 +44,7 @@ public class LogNativeFragment extends NativeFragment<LogFragmentInternal> {
             public Context getContext() {
                 return LogNativeFragment.this.getContext();
             }
-            
+
             @Override
             void onDelete() {
                 super.onDelete();
@@ -52,15 +52,13 @@ public class LogNativeFragment extends NativeFragment<LogFragmentInternal> {
             }
         };
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView((LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE), container, savedInstanceState);
     }
 
     void onDelete(int id) {
-//        getFragmentManager().beginTransaction().remove(this).commit();
-//        getFragmentManager().popBackStack("content", FragmentManager.POP_BACK_STACK_INCLUSIVE);
         Fragment f = getFragmentManager().findFragmentById(id);
         if (f != null && f instanceof PolicyNativeFragment) {
             PolicyNativeFragment p = (PolicyNativeFragment)f;

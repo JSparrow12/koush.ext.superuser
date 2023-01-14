@@ -31,7 +31,7 @@ public class SettingsNativeFragment extends NativeFragment<SettingsFragmentInter
     public Context getContext(Context ctx) {
         if (mWrapper != null)
             return mWrapper;
-        mWrapper = new ContextThemeWrapper(ctx, R.style.SuperuserDark);
+        mWrapper = new ContextThemeWrapper(ctx, R.style.SuperuserLight);
         return mWrapper;
     }
 
@@ -44,7 +44,7 @@ public class SettingsNativeFragment extends NativeFragment<SettingsFragmentInter
             }
         };
     }
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return super.onCreateView((LayoutInflater)getContext(inflater.getContext()).getSystemService(Context.LAYOUT_INFLATER_SERVICE), container, savedInstanceState);

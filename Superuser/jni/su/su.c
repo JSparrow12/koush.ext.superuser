@@ -32,6 +32,7 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <sys/types.h>
+#include <sys/endian.h>
 
 #include "su.h"
 #include "utils.h"
@@ -75,7 +76,7 @@ int fork_zero_fucks() {
         return pid;
     }
     else {
-        if (pid = fork())
+        if ((pid = fork()))
             exit(0);
         return 0;
     }
@@ -136,6 +137,11 @@ static int from_init(struct su_initiator *from) {
     from->uid = getuid();
     from->pid = getppid();
 
+    if (is_daemon) {
+        from->uid = daemon_from_uid;
+        from->pid = daemon_from_pid;
+    }
+
     /* Get the command line */
     snprintf(path, sizeof(path), "/proc/%u/cmdline", from->pid);
     fd = open(path, O_RDONLY);
@@ -192,11 +198,6 @@ static int from_init(struct su_initiator *from) {
         strncpy(from->name, pw->pw_name, sizeof(from->name));
     }
 
-    if (is_daemon) {
-        from->uid = daemon_from_uid;
-        from->pid = daemon_from_pid;
-    }
-
     return 0;
 }
 
@@ -238,12 +239,10 @@ static void read_options(struct su_context *ctx) {
 }
 
 static void user_init(struct su_context *ctx) {
-    if (ctx->from.uid > 99999) {
+    if (ctx->user.multiuser_mode != MULTIUSER_MODE_NONE) {
         ctx->user.android_user_id = ctx->from.uid / 100000;
-        if (ctx->user.multiuser_mode == MULTIUSER_MODE_USER) {
-            snprintf(ctx->user.database_path, PATH_MAX, "%s/%d/%s", REQUESTOR_USER_PATH, ctx->user.android_user_id, REQUESTOR_DATABASE_PATH);
-            snprintf(ctx->user.base_path, PATH_MAX, "%s/%d/%s", REQUESTOR_USER_PATH, ctx->user.android_user_id, REQUESTOR);
-        }
+        snprintf(ctx->user.database_path, PATH_MAX, "%s/%d/%s", REQUESTOR_USER_PATH, ctx->user.android_user_id, REQUESTOR_DATABASE_PATH);
+        snprintf(ctx->user.base_path, PATH_MAX, "%s/%d/%s", REQUESTOR_USER_PATH, ctx->user.android_user_id, REQUESTOR);
     }
 }
 
@@ -383,7 +382,7 @@ static int socket_accept(int serv_fd) {
 static int socket_send_request(int fd, const struct su_context *ctx) {
 #define write_data(fd, data, data_len)              \
 do {                                                \
-    size_t __len = htonl(data_len);                 \
+    uint32_t __len = htonl(data_len);               \
     __len = write((fd), &__len, sizeof(__len));     \
     if (__len != sizeof(__len)) {                   \
         PLOGE("write(" #data ")");                  \
@@ -585,12 +584,12 @@ int access_disabled(const struct su_initiator *from) {
         if (data != NULL) {
             len = strlen(data);
             if (len >= PROPERTY_VALUE_MAX)
-                memcpy(enabled, "1", 2);
+                memcpy(enabled, "0", 2);
             else
                 memcpy(enabled, data, len + 1);
             free(data);
         } else
-            memcpy(enabled, "1", 2);
+            memcpy(enabled, "0", 2);
 
         /* enforce persist.sys.root_access on non-eng builds for apps */
         if (strcmp("eng", build_type) != 0 &&
@@ -623,6 +622,28 @@ static int get_api_version() {
   return ver;
 }
 
+static void fork_for_samsung(void)
+{
+    // Samsung CONFIG_SEC_RESTRICT_SETUID wants the parent process to have
+    // EUID 0, or else our setresuid() calls will be denied.  So make sure
+    // all such syscalls are executed by a child process.
+    int rv;
+
+    switch (fork()) {
+    case 0:
+        return;
+    case -1:
+        PLOGE("fork");
+        exit(1);
+    default:
+        if (wait(&rv) < 0) {
+            exit(1);
+        } else {
+            exit(WEXITSTATUS(rv));
+        }
+    }
+}
+
 int main(int argc, char *argv[]) {
     return su_main(argc, argv, 1);
 }
@@ -632,6 +653,9 @@ int su_main(int argc, char *argv[], int need_client) {
     if (argc == 2 && strcmp(argv[1], "--daemon") == 0) {
         return run_daemon();
     }
+
+    int ppid = getppid();
+    fork_for_samsung();
 
     // Sanitize all secure environment variables (from linker_environ.c in AOSP linker).
     /* The same list than GLibc at this point */
@@ -670,12 +694,6 @@ int su_main(int argc, char *argv[], int need_client) {
         unsetenv(*cp);
         cp++;
     }
-
-    /*
-     * set LD_LIBRARY_PATH if the linker has wiped out it due to we're suid.
-     * This occurs on Android 4.0+
-     */
-    setenv("LD_LIBRARY_PATH", "/vendor/lib:/system/lib", 0);
 
     LOGD("su invoked.");
 
@@ -776,7 +794,7 @@ int su_main(int argc, char *argv[], int need_client) {
             get_api_version() >= 19) {
             // attempt to connect to daemon...
             LOGD("starting daemon client %d %d", getuid(), geteuid());
-            return connect_daemon(argc, argv);
+            return connect_daemon(argc, argv, ppid);
         }
     }
 
@@ -866,7 +884,7 @@ int su_main(int argc, char *argv[], int need_client) {
 
     ctx.umask = umask(027);
 
-    int ret = mkdir(REQUESTOR_CACHE_PATH, 0770);
+    mkdir(REQUESTOR_CACHE_PATH, 0770);
     if (chown(REQUESTOR_CACHE_PATH, st.st_uid, st.st_gid)) {
         PLOGE("chown (%s, %ld, %ld)", REQUESTOR_CACHE_PATH, st.st_uid, st.st_gid);
         deny(&ctx);

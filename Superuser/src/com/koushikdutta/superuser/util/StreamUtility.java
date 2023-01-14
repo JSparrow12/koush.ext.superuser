@@ -14,16 +14,16 @@ import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.WritableByteChannel;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpUriRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.net.http.AndroidHttpClient;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class StreamUtility {
-	private static final String LOGTAG = StreamUtility.class.getSimpleName();
+ //private static final String LOGTAG = StreamUtility.class.getSimpleName();
     public static void fastChannelCopy(final ReadableByteChannel src, final WritableByteChannel dest) throws IOException {
         final ByteBuffer buffer = ByteBuffer.allocateDirect(1 << 17);
         while (src.read(buffer) != -1) {
@@ -50,29 +50,29 @@ public class StreamUtility {
         // copy the channels
         fastChannelCopy(inputChannel, outputChannel);
     }
-    
+
     public static String downloadUriAsString(String uri) throws IOException {
-        HttpGet get = new HttpGet(uri);
+	URL get = new URL(uri);
         return downloadUriAsString(get);
     }
 
-    
-    public static String downloadUriAsString(final HttpUriRequest req) throws IOException {
-        AndroidHttpClient client = AndroidHttpClient.newInstance("Android");
-        try {
-            HttpResponse res = client.execute(req);
-            return readToEnd(res.getEntity().getContent());
+
+    public static String downloadUriAsString(final URL req) throws IOException {
+        InputStream in = req.openStream();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+        StringBuilder result = new StringBuilder();
+        String line;
+        while((line = reader.readLine()) != null) {
+            result.append(line);
         }
-        finally {
-            client.close();
-        }
+        return result.toString(); 
     }
 
     public static JSONObject downloadUriAsJSONObject(String uri) throws IOException, JSONException {
         return new JSONObject(downloadUriAsString(uri));
     }
 
-    public static JSONObject downloadUriAsJSONObject(HttpUriRequest req) throws IOException, JSONException {
+    public static JSONObject downloadUriAsJSONObject(URL req) throws IOException, JSONException {
         return new JSONObject(downloadUriAsString(req));
     }
 
@@ -89,32 +89,33 @@ public class StreamUtility {
         input.close();
         return buff.toByteArray();
     }
-    
+
     public static void eat(InputStream input) throws IOException {
         byte[] stuff = new byte[1024];
         while (input.read(stuff) != -1);
     }
-    
-	public static String readToEnd(InputStream input) throws IOException
-	{
-	    return new String(readToEndAsArray(input));
-	}
+
+ public static String readToEnd(InputStream input) throws IOException
+ {
+     return new String(readToEndAsArray(input));
+ }
 
     static public String readFile(String filename) throws IOException {
         return readFile(new File(filename));
     }
-    
+
     static public String readFile(File file) throws IOException {
         byte[] buffer = new byte[(int) file.length()];
         DataInputStream input = new DataInputStream(new FileInputStream(file));
         input.readFully(buffer);
+        input.close();
         return new String(buffer);
     }
-    
+
     public static void writeFile(File file, String string) throws IOException {
         writeFile(file.getAbsolutePath(), string);
     }
-    
+
     public static void writeFile(String file, String string) throws IOException {
         File f = new File(file);
         f.getParentFile().mkdirs();

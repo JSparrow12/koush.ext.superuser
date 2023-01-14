@@ -21,8 +21,8 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
+import androidx.core.app.NotificationCompat;
 
 import com.koushikdutta.superuser.db.LogEntry;
 import com.koushikdutta.superuser.db.SuperuserDatabaseHelper;
@@ -34,7 +34,7 @@ public class SuReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         if (intent == null)
             return;
-        
+
         String command = intent.getStringExtra("command");
         if (command == null)
             return;
@@ -82,15 +82,15 @@ public class SuReceiver extends BroadcastReceiver {
             .setContentTitle(context.getString(R.string.superuser))
             .setContentText(toast)
             .setSmallIcon(R.drawable.ic_stat_notification);
-            
+
             NotificationManager nm = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
-            nm.notify(NOTIFICATION_ID, builder.getNotification());
+            nm.notify(NOTIFICATION_ID, builder.build());
             break;
         case Settings.NOTIFICATION_TYPE_TOAST:
             Toast.makeText(context, toast, Toast.LENGTH_SHORT).show();
             break;
         }
     }
-    
+
     private static final int NOTIFICATION_ID = 4545;
 }
